@@ -1,0 +1,1121 @@
+/* ==========================================================================
+   VIRTUAL LAB: NETWORK TRAFFIC LIGHT (PRODUCT NO. 33)
+   Comprehensive Modern Design System & CSS Stylesheet
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Design System Tokens & Root Variables
+   -------------------------------------------------------------------------- */
+:root {
+    /* Color Palette */
+    --bg-dark: #0B0F19;
+    --bg-surface: #111827;
+    --bg-card: rgba(17, 24, 39, 0.85);
+    --bg-card-hover: rgba(31, 41, 55, 0.9);
+    --border-color: rgba(255, 255, 255, 0.08);
+    --border-glow: rgba(99, 102, 241, 0.3);
+
+    /* Typography Colors */
+    --text-primary: #F9FAFB;
+    --text-secondary: #9CA3AF;
+    --text-muted: #6B7280;
+
+    /* Traffic State Colors */
+    --traffic-green: #10B981;
+    --traffic-green-glow: rgba(16, 185, 129, 0.7);
+    --traffic-green-bg: rgba(16, 185, 129, 0.15);
+
+    --traffic-yellow: #F59E0B;
+    --traffic-yellow-glow: rgba(245, 158, 11, 0.7);
+    --traffic-yellow-bg: rgba(245, 158, 11, 0.15);
+
+    --traffic-red: #EF4444;
+    --traffic-red-glow: rgba(239, 68, 68, 0.7);
+    --traffic-red-bg: rgba(239, 68, 68, 0.15);
+
+    /* Primary Accent Colors */
+    --primary-indigo: #6366F1;
+    --primary-indigo-hover: #4F46E5;
+    --primary-indigo-glow: rgba(99, 102, 241, 0.4);
+
+    --accent-blue: #3B82F6;
+    --accent-purple: #8B5CF6;
+    --accent-cyan: #06B6D4;
+
+    /* Fonts & Radii */
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    --radius-sm: 6px;
+    --radius-md: 12px;
+    --radius-lg: 18px;
+    --radius-full: 9999px;
+
+    /* Shadows */
+    --shadow-card: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
+    --shadow-glow: 0 0 25px var(--primary-indigo-glow);
+
+    /* Transitions */
+    --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-normal: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* --------------------------------------------------------------------------
+   2. CSS Reset & Global Base Styles
+   -------------------------------------------------------------------------- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-sans);
+    background-color: var(--bg-dark);
+    background-image: 
+        radial-gradient(circle at 15% 15%, rgba(99, 102, 241, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(16, 185, 129, 0.05) 0%, transparent 40%);
+    background-attachment: fixed;
+    color: var(--text-primary);
+    line-height: 1.5;
+    min-height: 100vh;
+    padding: 1.5rem;
+    overflow-x: hidden;
+}
+
+/* Container Structure */
+.app-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* --------------------------------------------------------------------------
+   3. Header Section
+   -------------------------------------------------------------------------- */
+.app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    background: var(--bg-card);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-card);
+}
+
+.header-brand {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.brand-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-md);
+    background: linear-gradient(135deg, var(--primary-indigo), var(--accent-purple));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: #FFF;
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+}
+
+.header-brand h1 {
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+}
+
+.product-tag {
+    font-size: 0.825rem;
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+    display: inline-block;
+    margin-top: 2px;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.live-status-pill {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.85rem;
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    border-radius: var(--radius-full);
+    font-size: 0.825rem;
+    font-weight: 600;
+    color: var(--traffic-green);
+}
+
+.pulse-dot {
+    width: 8px;
+    height: 8px;
+    background-color: var(--traffic-green);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--traffic-green);
+    animation: pulseGlow 1.8s infinite;
+}
+
+@keyframes pulseGlow {
+    0% { transform: scale(0.95); opacity: 0.8; }
+    50% { transform: scale(1.3); opacity: 1; box-shadow: 0 0 14px var(--traffic-green); }
+    100% { transform: scale(0.95); opacity: 0.8; }
+}
+
+/* --------------------------------------------------------------------------
+   4. Base Card & Grid Layout
+   -------------------------------------------------------------------------- */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 420px 1fr;
+    gap: 1.5rem;
+}
+
+@media (max-width: 1024px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.card {
+    background: var(--bg-card);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-card);
+    transition: border-color var(--transition-fast);
+}
+
+.card:hover {
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.card-header h2 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-primary);
+}
+
+.card-header h2 i {
+    color: var(--primary-indigo);
+}
+
+/* Status Badge Component */
+.badge {
+    padding: 0.3rem 0.8rem;
+    border-radius: var(--radius-full);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.badge-low, .badge.status-low {
+    background: var(--traffic-green-bg);
+    color: var(--traffic-green);
+    border: 1px solid rgba(16, 185, 129, 0.4);
+}
+
+.badge-medium, .badge.status-medium {
+    background: var(--traffic-yellow-bg);
+    color: var(--traffic-yellow);
+    border: 1px solid rgba(245, 158, 11, 0.4);
+}
+
+.badge-high, .badge.status-high {
+    background: var(--traffic-red-bg);
+    color: var(--traffic-red);
+    border: 1px solid rgba(239, 68, 68, 0.4);
+}
+
+/* --------------------------------------------------------------------------
+   5. Virtual Traffic Light Section (Left Column)
+   -------------------------------------------------------------------------- */
+.traffic-light-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.traffic-light-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0.5rem 0 1.5rem 0;
+}
+
+/* Physical Traffic Light Casing */
+.traffic-light-casing {
+    width: 140px;
+    background: linear-gradient(180deg, #1F2937 0%, #111827 100%);
+    border: 3px solid #374151;
+    border-radius: 40px;
+    padding: 20px 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    align-items: center;
+    box-shadow: 
+        inset 0 4px 8px rgba(0, 0, 0, 0.8),
+        0 12px 30px rgba(0, 0, 0, 0.7);
+    position: relative;
+}
+
+.light-wrapper {
+    position: relative;
+}
+
+/* Realistic Traffic Lamp Circle */
+.traffic-lamp {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-normal);
+    border: 3px solid rgba(0, 0, 0, 0.6);
+    box-shadow: inset 0 6px 12px rgba(0, 0, 0, 0.9);
+    cursor: pointer;
+}
+
+.lamp-inner {
+    width: 80%;
+    height: 80%;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.25), transparent 70%);
+}
+
+.lamp-label {
+    position: absolute;
+    bottom: -8px;
+    font-size: 0.65rem;
+    font-weight: 800;
+    font-family: var(--font-mono);
+    color: rgba(255, 255, 255, 0.4);
+    background: rgba(0, 0, 0, 0.7);
+    padding: 1px 6px;
+    border-radius: 4px;
+    letter-spacing: 0.05em;
+}
+
+/* OFF STATES (Dark & Dim) */
+.lamp-red {
+    background-color: #3F1212;
+}
+
+.lamp-yellow {
+    background-color: #3F2D0C;
+}
+
+.lamp-green {
+    background-color: #063826;
+}
+
+/* ON / ACTIVE ILLUMINATED STATES (Vibrant Neon Glow) */
+.lamp-red.active {
+    background: radial-gradient(circle at 35% 35%, #FF7676 0%, #EF4444 60%, #991B1B 100%);
+    box-shadow: 
+        0 0 25px var(--traffic-red-glow),
+        0 0 50px rgba(239, 68, 68, 0.4),
+        inset 0 -4px 10px rgba(0, 0, 0, 0.5);
+    border-color: #FECACA;
+    transform: scale(1.05);
+}
+
+.lamp-yellow.active {
+    background: radial-gradient(circle at 35% 35%, #FDE047 0%, #F59E0B 60%, #B45309 100%);
+    box-shadow: 
+        0 0 25px var(--traffic-yellow-glow),
+        0 0 50px rgba(245, 158, 11, 0.4),
+        inset 0 -4px 10px rgba(0, 0, 0, 0.5);
+    border-color: #FEF08A;
+    transform: scale(1.05);
+}
+
+.lamp-green.active {
+    background: radial-gradient(circle at 35% 35%, #6EE7B7 0%, #10B981 60%, #065F46 100%);
+    box-shadow: 
+        0 0 25px var(--traffic-green-glow),
+        0 0 50px rgba(16, 185, 129, 0.4),
+        inset 0 -4px 10px rgba(0, 0, 0, 0.5);
+    border-color: #A7F3D0;
+    transform: scale(1.05);
+}
+
+.lamp-red.active .lamp-label { color: #FECACA; }
+.lamp-yellow.active .lamp-label { color: #FEF08A; }
+.lamp-green.active .lamp-label { color: #A7F3D0; }
+
+/* Dynamic Traffic Numerical Display */
+.traffic-metric-display {
+    width: 100%;
+    margin-top: 1.25rem;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.25);
+    padding: 1rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+}
+
+.metric-primary-value {
+    font-size: 2.5rem;
+    font-weight: 800;
+    font-family: var(--font-mono);
+    line-height: 1;
+    color: var(--text-primary);
+}
+
+.metric-primary-value .unit {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-left: 4px;
+}
+
+/* Capacity Progress Bar */
+.capacity-bar-wrapper {
+    height: 10px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    margin: 0.85rem 0 0.35rem 0;
+}
+
+.capacity-bar-fill {
+    height: 100%;
+    width: 18%;
+    background: linear-gradient(90deg, var(--traffic-green), var(--primary-indigo));
+    border-radius: var(--radius-full);
+    transition: width var(--transition-normal), background-color var(--transition-normal);
+}
+
+.capacity-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+}
+
+.last-updated {
+    margin-top: 0.75rem;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+/* Simulation Controls Panel */
+.controls-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.primary-btn-group {
+    display: flex;
+    gap: 0.75rem;
+}
+
+/* Toggle Switch Styling */
+.auto-sim-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 0.65rem 0.9rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+}
+
+.toggle-control {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.toggle-label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #374151;
+    transition: .3s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .3s;
+}
+
+.slider.round {
+    border-radius: 24px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: var(--primary-indigo);
+}
+
+input:checked + .slider:before {
+    transform: translateX(20px);
+}
+
+/* Preset Buttons */
+.preset-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.preset-title {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.preset-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+}
+
+/* --------------------------------------------------------------------------
+   6. Buttons & Interactive Controls
+   -------------------------------------------------------------------------- */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.2rem;
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: var(--radius-md);
+    border: none;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    outline: none;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-indigo), var(--accent-purple));
+    color: #FFF;
+    box-shadow: 0 4px 14px var(--primary-indigo-glow);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.6);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.btn-danger {
+    background: rgba(239, 68, 68, 0.15);
+    color: var(--traffic-red);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.btn-danger:hover {
+    background: rgba(239, 68, 68, 0.25);
+}
+
+.btn-large {
+    width: 100%;
+    padding: 0.85rem 1.5rem;
+    font-size: 1rem;
+}
+
+.btn-sm {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.785rem;
+    border-radius: var(--radius-sm);
+}
+
+.btn-outline-green {
+    background: transparent;
+    color: var(--traffic-green);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.btn-outline-green:hover {
+    background: var(--traffic-green-bg);
+}
+
+.btn-outline-yellow {
+    background: transparent;
+    color: var(--traffic-yellow);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.btn-outline-yellow:hover {
+    background: var(--traffic-yellow-bg);
+}
+
+.btn-outline-red {
+    background: transparent;
+    color: var(--traffic-red);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.btn-outline-red:hover {
+    background: var(--traffic-red-bg);
+}
+
+.btn-outline {
+    background: transparent;
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color);
+}
+
+.btn-outline:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+}
+
+.btn-icon {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.btn-icon:hover {
+    color: var(--text-primary);
+    border-color: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* --------------------------------------------------------------------------
+   7. Right Column: Metrics Summary Grid & Chart
+   -------------------------------------------------------------------------- */
+.analytics-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.metrics-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+}
+
+@media (max-width: 900px) {
+    .metrics-summary-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 500px) {
+    .metrics-summary-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.metric-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.1rem;
+}
+
+.metric-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    flex-shrink: 0;
+}
+
+.metric-icon.green {
+    background: var(--traffic-green-bg);
+    color: var(--traffic-green);
+}
+
+.metric-icon.blue {
+    background: rgba(59, 130, 246, 0.15);
+    color: var(--accent-blue);
+}
+
+.metric-icon.purple {
+    background: rgba(139, 92, 246, 0.15);
+    color: var(--accent-purple);
+}
+
+.metric-icon.orange {
+    background: rgba(245, 158, 11, 0.15);
+    color: var(--traffic-yellow);
+}
+
+.metric-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.metric-title {
+    font-size: 0.775rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.metric-number {
+    font-size: 1.25rem;
+    font-weight: 700;
+    font-family: var(--font-mono);
+    color: var(--text-primary);
+    line-height: 1.2;
+}
+
+.metric-subtext {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+}
+
+/* Real-Time Traffic Chart */
+.chart-card {
+    display: flex;
+    flex-direction: column;
+}
+
+.chart-legend-custom {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.legend-item span {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.low-legend span { background: var(--traffic-green); }
+.med-legend span { background: var(--traffic-yellow); }
+.high-legend span { background: var(--traffic-red); }
+
+.chart-wrapper {
+    position: relative;
+    height: 280px;
+    width: 100%;
+    margin-top: 0.5rem;
+}
+
+/* --------------------------------------------------------------------------
+   8. Explanation Section Cards Grid
+   -------------------------------------------------------------------------- */
+.explanation-section {
+    margin-top: 0.5rem;
+}
+
+.subtitle-tag {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+}
+
+.explanation-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+    margin-top: 0.5rem;
+}
+
+@media (max-width: 900px) {
+    .explanation-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.explanation-card {
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 1.25rem;
+    transition: transform var(--transition-fast), border-color var(--transition-fast);
+}
+
+.explanation-card:hover {
+    transform: translateY(-3px);
+}
+
+.card-green { border-top: 4px solid var(--traffic-green); }
+.card-yellow { border-top: 4px solid var(--traffic-yellow); }
+.card-red { border-top: 4px solid var(--traffic-red); }
+
+.exp-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.exp-badge {
+    font-size: 0.7rem;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+    letter-spacing: 0.05em;
+}
+
+.exp-badge.green { background: var(--traffic-green-bg); color: var(--traffic-green); }
+.exp-badge.yellow { background: var(--traffic-yellow-bg); color: var(--traffic-yellow); }
+.exp-badge.red { background: var(--traffic-red-bg); color: var(--traffic-red); }
+
+.exp-header h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.range-tag {
+    font-size: 0.75rem;
+    font-family: var(--font-mono);
+    color: var(--text-secondary);
+    background: rgba(255, 255, 255, 0.05);
+    padding: 3px 8px;
+    border-radius: var(--radius-sm);
+    display: inline-block;
+    margin-bottom: 0.75rem;
+}
+
+.exp-body p {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.75rem;
+    line-height: 1.4;
+}
+
+.exp-body ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.exp-body ul li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.text-green { color: var(--traffic-green); }
+.text-yellow { color: var(--traffic-yellow); }
+.text-red { color: var(--traffic-red); }
+
+/* --------------------------------------------------------------------------
+   9. Traffic Simulation History Table
+   -------------------------------------------------------------------------- */
+.history-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.825rem;
+    color: var(--text-secondary);
+}
+
+.form-select {
+    background: var(--bg-surface);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    padding: 0.35rem 0.75rem;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    outline: none;
+    cursor: pointer;
+}
+
+.table-responsive {
+    overflow-x: auto;
+    margin-top: 0.5rem;
+    max-height: 350px;
+    overflow-y: auto;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+}
+
+.history-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.85rem;
+}
+
+.history-table th {
+    background: #1F2937;
+    color: var(--text-secondary);
+    font-weight: 600;
+    padding: 0.75rem 1rem;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    border-bottom: 1px solid var(--border-color);
+    font-family: var(--font-mono);
+}
+
+.history-table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    color: var(--text-primary);
+}
+
+.history-table tbody tr {
+    transition: background-color var(--transition-fast);
+}
+
+.history-table tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.03);
+}
+
+.table-footer {
+    margin-top: 0.75rem;
+    font-size: 0.775rem;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    text-align: right;
+}
+
+/* --------------------------------------------------------------------------
+   10. Modal Dialog (Project Presentation Documentation)
+   -------------------------------------------------------------------------- */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--transition-normal);
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    width: 90%;
+    max-width: 800px;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+    transform: translateY(20px);
+    transition: transform var(--transition-normal);
+}
+
+.modal-overlay.active .modal-content {
+    transform: translateY(0);
+}
+
+.modal-header {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h2 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.modal-close {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0 0.5rem;
+    line-height: 1;
+}
+
+.modal-close:hover {
+    color: var(--text-primary);
+}
+
+.modal-body {
+    padding: 1.5rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.doc-block h3 {
+    font-size: 1rem;
+    color: var(--primary-indigo);
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.doc-block p, .doc-block li {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+.highlight-text {
+    font-weight: 700;
+    color: var(--text-primary) !important;
+    font-size: 1.05rem !important;
+}
+
+.doc-block ul, .doc-block ol {
+    margin-left: 1.25rem;
+}
+
+.tech-tags {
+    list-style: none !important;
+    margin-left: 0 !important;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.tech-tags li {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color);
+    padding: 0.35rem 0.75rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.8rem;
+}
+
+.tech-tags li span {
+    color: var(--primary-indigo);
+    font-weight: 700;
+}
+
+.modal-footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* --------------------------------------------------------------------------
+   11. Footer
+   -------------------------------------------------------------------------- */
+.app-footer {
+    text-align: center;
+    padding: 1.5rem 0;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    border-top: 1px solid var(--border-color);
+    margin-top: 1rem;
+}
+
+.footer-sub {
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+}

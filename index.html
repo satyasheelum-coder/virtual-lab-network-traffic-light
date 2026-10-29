@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Virtual Lab Network Traffic Light - Product No. 33. A 100% software-based network traffic monitoring dashboard and simulation tool for CSE students.">
+    <title>Virtual Lab: Network Traffic Light (Product No. 33)</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Main App Container -->
+    <div class="app-container">
+        <!-- Top Navigation Header -->
+        <header class="app-header">
+            <div class="header-brand">
+                <div class="brand-icon">
+                    <i class="fa-solid fa-network-wired"></i>
+                </div>
+                <div>
+                    <h1>Virtual Lab: Network Traffic Light</h1>
+                    <span class="product-tag"><i class="fa-solid fa-hashtag"></i> Product No. 33 &bull; BTech CSE Project</span>
+                </div>
+            </div>
+
+            <div class="header-actions">
+                <div class="live-status-pill" id="live-indicator">
+                    <span class="pulse-dot"></span>
+                    <span id="live-status-text">System Ready</span>
+                </div>
+                <button class="btn btn-secondary" id="open-info-modal-btn">
+                    <i class="fa-solid fa-graduation-cap"></i> Project Overview
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Dashboard Content Grid -->
+        <main class="dashboard-grid">
+            <!-- Left Column: Virtual Traffic Light & Interactive Controls -->
+            <section class="card traffic-light-section" aria-labelledby="traffic-light-heading">
+                <div class="card-header">
+                    <h2 id="traffic-light-heading"><i class="fa-solid fa-traffic-light"></i> Virtual Traffic Signal</h2>
+                    <span class="badge" id="traffic-status-badge">LOW</span>
+                </div>
+
+                <div class="traffic-light-container">
+                    <!-- Physical Housing Simulation -->
+                    <div class="traffic-light-casing">
+                        <div class="light-visor"></div>
+                        
+                        <!-- RED LIGHT -->
+                        <div class="light-wrapper">
+                            <div class="traffic-lamp lamp-red" id="lamp-red">
+                                <div class="lamp-inner"></div>
+                                <span class="lamp-label">HIGH</span>
+                            </div>
+                        </div>
+
+                        <!-- YELLOW LIGHT -->
+                        <div class="light-wrapper">
+                            <div class="traffic-lamp lamp-yellow" id="lamp-yellow">
+                                <div class="lamp-inner"></div>
+                                <span class="lamp-label">MED</span>
+                            </div>
+                        </div>
+
+                        <!-- GREEN LIGHT -->
+                        <div class="light-wrapper">
+                            <div class="traffic-lamp lamp-green active" id="lamp-green">
+                                <div class="lamp-inner"></div>
+                                <span class="lamp-label">LOW</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Current Traffic Metrics Highlight -->
+                    <div class="traffic-metric-display">
+                        <div class="metric-primary-value">
+                            <span id="current-traffic-val">180</span>
+                            <span class="unit">Mbps</span>
+                        </div>
+                        <div class="capacity-bar-wrapper">
+                            <div class="capacity-bar-fill" id="capacity-bar" style="width: 18%;"></div>
+                        </div>
+                        <div class="capacity-labels">
+                            <span>0%</span>
+                            <span id="traffic-percent-text">18% Capacity</span>
+                            <span>100%</span>
+                        </div>
+                        <div class="last-updated">
+                            <i class="fa-regular fa-clock"></i> Last Updated: <span id="last-updated-time">Just now</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Simulation Controls -->
+                <div class="controls-panel">
+                    <div class="primary-btn-group">
+                        <button class="btn btn-primary btn-large" id="simulate-btn">
+                            <i class="fa-solid fa-bolt"></i> Simulate Traffic
+                        </button>
+                    </div>
+
+                    <div class="auto-sim-row">
+                        <div class="toggle-control">
+                            <label class="switch">
+                                <input type="checkbox" id="auto-sim-toggle">
+                                <span class="slider round"></span>
+                            </label>
+                            <span class="toggle-label">Auto Simulation (2s Interval)</span>
+                        </div>
+                        <div class="sound-control">
+                            <button class="btn-icon" id="sound-toggle-btn" title="Toggle audio alert on high traffic">
+                                <i class="fa-solid fa-volume-xmark" id="sound-icon"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Quick Preset Scenarios -->
+                    <div class="preset-section">
+                        <span class="preset-title">Test Scenarios:</span>
+                        <div class="preset-buttons">
+                            <button class="btn btn-sm btn-outline-green" data-preset="low">
+                                <i class="fa-solid fa-check"></i> Low (150 Mbps)
+                            </button>
+                            <button class="btn btn-sm btn-outline-yellow" data-preset="medium">
+                                <i class="fa-solid fa-triangle-exclamation"></i> Med (520 Mbps)
+                            </button>
+                            <button class="btn btn-sm btn-outline-red" data-preset="high">
+                                <i class="fa-solid fa-fire"></i> High/DDoS (890 Mbps)
+                            </button>
+                            <button class="btn btn-sm btn-outline" data-preset="random">
+                                <i class="fa-solid fa-dice"></i> Random
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Column: Real-Time Network Analytics & Chart -->
+            <section class="analytics-section">
+                <!-- Metrics Summary Cards Grid -->
+                <div class="metrics-summary-grid">
+                    <div class="card metric-card">
+                        <div class="metric-icon green">
+                            <i class="fa-solid fa-gauge-high"></i>
+                        </div>
+                        <div class="metric-info">
+                            <span class="metric-title">Current Load</span>
+                            <span class="metric-number" id="metric-load-percent">18%</span>
+                            <span class="metric-subtext" id="metric-load-status">Normal bandwidth</span>
+                        </div>
+                    </div>
+
+                    <div class="card metric-card">
+                        <div class="metric-icon blue">
+                            <i class="fa-solid fa-chart-line"></i>
+                        </div>
+                        <div class="metric-info">
+                            <span class="metric-title">Average Load</span>
+                            <span class="metric-number" id="metric-avg-val">180 Mbps</span>
+                            <span class="metric-subtext">Session baseline</span>
+                        </div>
+                    </div>
+
+                    <div class="card metric-card">
+                        <div class="metric-icon purple">
+                            <i class="fa-solid fa-stopwatch"></i>
+                        </div>
+                        <div class="metric-info">
+                            <span class="metric-title">Est. Latency</span>
+                            <span class="metric-number" id="metric-latency">12 ms</span>
+                            <span class="metric-subtext" id="metric-latency-status">Low delay</span>
+                        </div>
+                    </div>
+
+                    <div class="card metric-card">
+                        <div class="metric-icon orange">
+                            <i class="fa-solid fa-box-archive"></i>
+                        </div>
+                        <div class="metric-info">
+                            <span class="metric-title">Packet Loss</span>
+                            <span class="metric-number" id="metric-packet-loss">0.0%</span>
+                            <span class="metric-subtext" id="metric-loss-status">Optimal delivery</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live Traffic Chart Card -->
+                <div class="card chart-card">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-chart-area"></i> Network Traffic Over Time</h2>
+                        <div class="chart-legend-custom">
+                            <span class="legend-item low-legend"><span></span> Green (&lt; 350 Mbps)</span>
+                            <span class="legend-item med-legend"><span></span> Yellow (350-700 Mbps)</span>
+                            <span class="legend-item high-legend"><span></span> Red (&gt; 700 Mbps)</span>
+                        </div>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="trafficChart"></canvas>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Traffic Light Threshold Logic Explanation Cards -->
+        <section class="card explanation-section">
+            <div class="card-header">
+                <h2><i class="fa-solid fa-circle-info"></i> Network Traffic Classification Matrix</h2>
+                <span class="subtitle-tag">Threshold Rules & Network Impact</span>
+            </div>
+            <div class="explanation-grid">
+                <!-- Green Card -->
+                <div class="explanation-card card-green">
+                    <div class="exp-header">
+                        <div class="exp-badge green">GREEN</div>
+                        <h3>LOW TRAFFIC</h3>
+                    </div>
+                    <div class="exp-body">
+                        <div class="range-tag">0 Mbps - 350 Mbps (0% - 35%)</div>
+                        <p><strong>Network State:</strong> Normal operating conditions. Bandwidth availability is high and packet queues are empty.</p>
+                        <ul>
+                            <li><i class="fa-solid fa-check text-green"></i> <strong>Latency:</strong> Low (&lt; 20 ms)</li>
+                            <li><i class="fa-solid fa-check text-green"></i> <strong>Packet Drops:</strong> 0%</li>
+                            <li><i class="fa-solid fa-check text-green"></i> <strong>System Action:</strong> No intervention required. System running smoothly.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Yellow Card -->
+                <div class="explanation-card card-yellow">
+                    <div class="exp-header">
+                        <div class="exp-badge yellow">YELLOW</div>
+                        <h3>MEDIUM TRAFFIC</h3>
+                    </div>
+                    <div class="exp-body">
+                        <div class="range-tag">351 Mbps - 700 Mbps (36% - 70%)</div>
+                        <p><strong>Network State:</strong> Moderate congestion. Routers experience packet buffering and queue depths increase.</p>
+                        <ul>
+                            <li><i class="fa-solid fa-triangle-exclamation text-yellow"></i> <strong>Latency:</strong> Moderate (20 - 60 ms)</li>
+                            <li><i class="fa-solid fa-triangle-exclamation text-yellow"></i> <strong>Packet Drops:</strong> Minimal (&lt; 0.5%)</li>
+                            <li><i class="fa-solid fa-triangle-exclamation text-yellow"></i> <strong>System Action:</strong> Monitor bandwidth usage; prepare queue optimization.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Red Card -->
+                <div class="explanation-card card-red">
+                    <div class="exp-header">
+                        <div class="exp-badge red">RED</div>
+                        <h3>HIGH TRAFFIC</h3>
+                    </div>
+                    <div class="exp-body">
+                        <div class="range-tag">701 Mbps - 1000 Mbps (71% - 100%)</div>
+                        <p><strong>Network State:</strong> Critical overload / potential DDoS attack. Buffer overflow causes packet drops and high jitter.</p>
+                        <ul>
+                            <li><i class="fa-solid fa-xmark text-red"></i> <strong>Latency:</strong> Severe (&gt; 100 ms)</li>
+                            <li><i class="fa-solid fa-xmark text-red"></i> <strong>Packet Drops:</strong> High (&gt; 2.0%)</li>
+                            <li><i class="fa-solid fa-xmark text-red"></i> <strong>System Action:</strong> Trigger rate-limiting, load balancing, or admin alert.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Traffic History Log Table -->
+        <section class="card history-section">
+            <div class="card-header">
+                <h2><i class="fa-solid fa-clock-rotate-left"></i> Traffic Simulation History Log</h2>
+                <div class="history-actions">
+                    <div class="filter-group">
+                        <label for="history-filter"><i class="fa-solid fa-filter"></i> Filter:</label>
+                        <select id="history-filter" class="form-select">
+                            <option value="all">All Statuses</option>
+                            <option value="LOW">Low (Green)</option>
+                            <option value="MEDIUM">Medium (Yellow)</option>
+                            <option value="HIGH">High (Red)</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-secondary btn-sm" id="export-csv-btn">
+                        <i class="fa-solid fa-download"></i> Export CSV
+                    </button>
+                    <button class="btn btn-danger btn-sm" id="clear-history-btn">
+                        <i class="fa-solid fa-trash-can"></i> Clear History
+                    </button>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="history-table" id="history-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Timestamp</th>
+                            <th>Traffic Value</th>
+                            <th>Utilization</th>
+                            <th>Status Indicator</th>
+                            <th>Est. Latency</th>
+                            <th>Packet Drops</th>
+                            <th>Trigger Type</th>
+                        </tr>
+                    </thead>
+                    <tbody id="history-table-body">
+                        <!-- Dynamic History Rows Inserted Here -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="table-footer" id="table-footer-info">
+                Showing <span id="history-count">0</span> entries
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <p>&copy; 2026 Virtual Lab Network Traffic Light &bull; Product No. 33 &bull; Academic CSE Project</p>
+            <p class="footer-sub">Designed for 2nd Year BTech Computer Science & Engineering Presentation</p>
+        </footer>
+    </div>
+
+    <!-- Project Presentation / Overview Modal -->
+    <div class="modal-overlay" id="info-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fa-solid fa-book-open"></i> Project Academic Documentation (Product No. 33)</h2>
+                <button class="modal-close" id="close-info-modal-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="doc-block">
+                    <h3><i class="fa-solid fa-heading"></i> Project Title</h3>
+                    <p class="highlight-text">Virtual Lab Network Traffic Light (Product No. 33)</p>
+                </div>
+
+                <div class="doc-block">
+                    <h3><i class="fa-solid fa-triangle-exclamation"></i> Problem Statement</h3>
+                    <p>Traditional computer network laboratory experiments often rely on expensive physical hardware (microcontrollers like Arduino/Raspberry Pi, breadboards, physical LEDs, or dedicated router testbeds). These setups suffer from hardware availability constraints, maintenance costs, and wiring complexities. Students need a 100% software-based, interactive virtual lab environment to learn network traffic dynamics, threshold monitoring, and visual status signaling without physical hardware.</p>
+                </div>
+
+                <div class="doc-block">
+                    <h3><i class="fa-solid fa-bullseye"></i> Objective</h3>
+                    <ul>
+                        <li>Simulate real-time computer network traffic bandwidth variations (0 to 1000 Mbps).</li>
+                        <li>Map continuous numerical traffic values into discrete operational states: LOW (Green), MEDIUM (Yellow), and HIGH (Red).</li>
+                        <li>Provide an intuitive virtual traffic light visual indicator with animated illumination effects.</li>
+                        <li>Render live traffic trend charts and maintain historical logs for bandwidth analysis.</li>
+                        <li>Offer an easy-to-understand codebase for 2nd-year BTech CSE student presentation and demonstration.</li>
+                    </ul>
+                </div>
+
+                <div class="doc-block">
+                    <h3><i class="fa-solid fa-gears"></i> How the System Works</h3>
+                    <ol>
+                        <li><strong>Data Generation / Ingestion:</strong> When the user clicks "Simulate Traffic" or enables "Auto Simulation", the system generates a traffic value between 0 and 1000 Mbps (or loads preset scenarios).</li>
+                        <li><strong>Threshold Classification Logic:</strong>
+                            <ul>
+                                <li><code>0 - 350 Mbps</code> (&le; 35%) &rarr; Classified as <strong>LOW</strong> &rarr; Activates <strong>GREEN Light</strong></li>
+                                <li><code>351 - 700 Mbps</code> (36% - 70%) &rarr; Classified as <strong>MEDIUM</strong> &rarr; Activates <strong>YELLOW Light</strong></li>
+                                <li><code>701 - 1000 Mbps</code> (&gt; 70%) &rarr; Classified as <strong>HIGH</strong> &rarr; Activates <strong>RED Light</strong></li>
+                            </ul>
+                        </li>
+                        <li><strong>UI & DOM Synchronization:</strong> The virtual traffic light casing updates its active glowing lamp, updates status badges, latency/packet loss metrics, and timestamp.</li>
+                        <li><strong>Graph & History Updates:</strong> The new data point is pushed to the Chart.js dataset and appended to the dynamic history log table.</li>
+                    </ol>
+                </div>
+
+                <div class="doc-block">
+                    <h3><i class="fa-solid fa-code"></i> Technologies Used</h3>
+                    <ul class="tech-tags">
+                        <li><span>HTML5</span> Semantic Page Layout</li>
+                        <li><span>CSS3</span> Glassmorphism, CSS Variables, Animations</li>
+                        <li><span>JavaScript (ES6+)</span> DOM Manipulation, Event Listeners, State Management</li>
+                        <li><span>Chart.js</span> HTML5 Canvas Data Visualization</li>
+                        <li><span>Font Awesome</span> Vector Iconography</li>
+                    </ul>
+                </div>
+
+                <div class="doc-block">
+                    <h3><i class="fa-solid fa-rocket"></i> Future Scope</h3>
+                    <ul>
+                        <li><strong>Real Packet Sniffing:</strong> Integrate with WebSockets or backend APIs (e.g., Python Scapy / Wireshark) for live network packet monitoring.</li>
+                        <li><strong>Machine Learning Anomaly Detection:</strong> Implement predictive models to detect DDoS attacks before thresholds are crossed.</li>
+                        <li><strong>Multi-Node Topology:</strong> Extend the single traffic light into a virtual network topology visualizer with multiple router nodes.</li>
+                        <li><strong>Automated Email Alerts:</strong> Send SMTP alerts to network administrators when the light turns RED.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="close-info-modal-footer-btn">Got It / Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio Beep for High Traffic Alerts (Web Audio API or audio element) -->
+    <script src="script.js"></script>
+</body>
+</html>
